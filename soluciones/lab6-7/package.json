@@ -1,0 +1,14 @@
+{
+  "name": "lab7",
+  "version": "0.0.1",
+  "description": "Solucion de laboratorio 7",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Erick",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}
