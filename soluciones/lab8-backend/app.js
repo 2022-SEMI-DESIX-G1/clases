@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const axios = require("axios").default;
 
@@ -8,6 +9,8 @@ const { PORT = 3000 } = process.env;
 
 const CACHE = {};
 const ERROR = {};
+
+app.use(cors());
 
 app.get("/cache", function (req, res) {
   res.json({ data: CACHE });
