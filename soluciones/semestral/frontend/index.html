@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="poke-shop-container">
+    <form id="poke-shop-form" class="poke-shop gradient-border" action="">
+      <h1>Poke shop</h1>
+      <label for="">Pokemon name:</label>
+      <input name="name" type="text">
+      <label for="">Price:</label>
+      <input name="price" type="text">
+      <button type="submit">Enviar</button>
+      <div class="yappy-button hidden">
+        <a id="yappy-anchor" href="#">
+          <span>Pagar con</span>
+          <span>yappy</span>
+        </a>
+      </div>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    (() => {
+      const App = {
+        htmlElements: {
+          form: document.getElementById("poke-shop-form"),
+          yappyButton: document.querySelector('.yappy-button'),
+          yappyAnchor: document.getElementById("yappy-anchor"),
+        },
+        init() {
+          App.htmlElements.form.addEventListener('submit', App.handlers.onFormSubmit);
+        },
+        handlers: {
+          async onFormSubmit(e) {
+            e.preventDefault();
+            const name = e.target.elements.name.value;
+            const price = parseFloat(e.target.elements.price.value);
+            const { data: { url } } = await axios.post(
+              'http://localhost:3000/api/pagosbg', 
+              { name, price }
+            );
+            App.htmlElements.yappyButton.classList.value = 'yappy-button flex',
+            App.htmlElements.yappyAnchor.href = url;
+            App.htmlElements.yappyAnchor.target = "_blank";
+          }
+        }
+      };
+      App.init();
+    })();
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap');
+
+    .poke-shop-container {
+      display: flex;
+      width: 100vw;
+      height: 90vh;
+      justify-content: center;
+      align-items: center;
+      font-family: 'roboto';
+    }
+
+    .poke-shop {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .gradient-border {
+      --borderWidth: 3px;
+      background: #FFF;
+      position: relative;
+      border-radius: var(--borderWidth);
+    }
+    .gradient-border:after {
+      content: '';
+      position: absolute;
+      top: calc(-1 * var(--borderWidth));
+      left: calc(-1 * var(--borderWidth));
+      height: calc(100% + var(--borderWidth) * 2);
+      width: calc(100% + var(--borderWidth) * 2);
+      background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+      border-radius: calc(2 * var(--borderWidth));
+      z-index: -1;
+      animation: animatedgradient 3s ease alternate infinite;
+      background-size: 300% 300%;
+    }
+
+
+    @keyframes animatedgradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+</body>
+</html>
