@@ -3,7 +3,7 @@ require("dotenv").config();
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const express = require("express");
-const { createClient, YappyPayment } = require("yappy-node-back-sdk");
+const { createClient } = require("yappy-node-back-sdk");
 const app = express();
 
 let yappyClient = createClient(process.env.MERCHANT_ID, process.env.SECRET_KEY);
@@ -15,8 +15,8 @@ const payment = {
   discount: 0.0,
   taxes: null,
   orderId: null,
-  successUrl: "https://www.yappy.peqa.dev",
-  failUrl: "https://www.yappy.peqa.dev",
+  successUrl: "https://www.yappy.peqa.dev?pid=123123123123&status=success",
+  failUrl: "https://www.yappy.peqa.dev?pid=123123123123&status=error",
   tel: process.env.TEL || "66666666",
   domain: process.env.DOMAIN || "https://yappy.peqa.dev",
 };
@@ -31,19 +31,13 @@ app.post("/api/pagosbg", async (req, res) => {
   const total = subtotal + taxes;
   const newPayment = {
     ...payment,
-    subtotal,
-    taxes,
-    total,
+    subtotal: 0.01, // Para evitar tener que pagar durante la prueba
+    taxes: 0.01, // Para evitar tener que pagar durante la prueba
+    total: 0.02, // Para evitar tener que pagar durante la prueba
     orderId: uuid.split("-").join("").slice(0, 10),
   };
   const response = await yappyClient.getPaymentUrl(newPayment);
   res.json(response);
-});
-
-app.get("/api/v1/status", async (req, res) => {
-  const response = yappyClient.validateHash(req.query);
-  console.log({ response });
-  res.json("pasodkapsodkapsodkapsodkapsok");
 });
 
 app.listen(3000);
